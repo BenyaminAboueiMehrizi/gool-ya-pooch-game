@@ -27,13 +27,13 @@ cd goal-or-empty
 - **HTML** for the page structure
 - **CSS** for styling and animations
 - **JavaScript** for game logic
-
+---
 ## 📂 **Project Structure**
 ```
 ├── index.html
 ├── style.css
 └── script.js
-
+---
 
 ## 📌 **Author**
 [Benyamin Abouei Mehrizi]

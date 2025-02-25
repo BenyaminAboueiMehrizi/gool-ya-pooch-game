@@ -28,14 +28,13 @@ cd goal-or-empty
 - **CSS** for styling and animations
 - **JavaScript** for game logic
 ---
-## 📂 **Project Structure**
-```
+📂 Project Structure
 ├── index.html
 ├── style.css
 └── script.js
 ---
 
-## 📌 **Author**
+📌 Author
 [Benyamin Abouei Mehrizi]
 
 If you have any ideas or suggestions to improve the game, feel free to share! 🙌

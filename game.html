@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>بازی گل یا پوچ</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #8ec5fc, #e0c3fc);
+        font-family: Arial, sans-serif;
+        color: #333;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      .game-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+      }
+      .cup {
+        width: 60px;
+        height: 80px;
+        background: #ffd369;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        position: relative;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, background 0.3s;
+      }
+      .cup:hover {
+        transform: scale(1.1);
+      }
+      .ball {
+        width: 20px;
+        height: 20px;
+        background: #ff6a88;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 10px;
+      }
+      .hidden-ball {
+        display: none;
+      }
+      .message {
+        margin-top: 20px;
+        font-size: 1.2rem;
+      }
+      .restart-button {
+        background: #6a0572;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        margin-top: 15px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s, transform 0.2s;
+      }
+      .restart-button:hover {
+        background: #49034b;
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>بازی گل یا پوچ</h1>
+    <div class="game-container" id="game-container"></div>
+    <div class="message" id="message"></div>
+    <button
+      class="restart-button"
+      id="restart-button"
+      onclick="restartGame()"
+      style="display: none"
+    >
+      شروع دوباره
+    </button>
+
+    <script>
+      const gameContainer = document.getElementById("game-container");
+      const message = document.getElementById("message");
+      const restartButton = document.getElementById("restart-button");
+
+      let numCups = 3;
+      let ballPosition = 0;
+      let movingInterval;
+
+      function startGame() {
+        gameContainer.innerHTML = "";
+        message.textContent = "";
+        restartButton.style.display = "none";
+
+        createCups();
+        placeBall();
+
+        setTimeout(() => {
+          hideBall();
+          shuffleCups();
+        }, 2000); // نشان دادن گل برای 2 ثانیه
+      }
+
+      function createCups() {
+        for (let i = 0; i < numCups; i++) {
+          const cup = document.createElement("div");
+          cup.classList.add("cup");
+          cup.dataset.index = i;
+
+          const ball = document.createElement("div");
+          ball.classList.add("ball", "hidden-ball");
+          cup.appendChild(ball);
+
+          cup.addEventListener("click", () => checkGuess(i));
+          gameContainer.appendChild(cup);
+        }
+      }
+
+      function placeBall() {
+        ballPosition = Math.floor(Math.random() * numCups);
+        const cups = document.querySelectorAll(".cup");
+        cups[ballPosition]
+          .querySelector(".ball")
+          .classList.remove("hidden-ball");
+      }
+
+      function hideBall() {
+        const cups = document.querySelectorAll(".cup");
+        cups[ballPosition].querySelector(".ball").classList.add("hidden-ball");
+      }
+
+      function shuffleCups() {
+        const cups = document.querySelectorAll(".cup");
+        let moves = 0;
+        movingInterval = setInterval(() => {
+          const cup1 = Math.floor(Math.random() * numCups);
+          const cup2 = (cup1 + 1) % numCups;
+
+          swapCups(cups[cup1], cups[cup2]);
+
+          moves++;
+          if (moves >= 10) {
+            clearInterval(movingInterval);
+          }
+        }, 500); // هر 0.5 ثانیه یک حرکت
+      }
+
+      function swapCups(cup1, cup2) {
+        const temp = cup1.style.order;
+        cup1.style.order = cup2.style.order;
+        cup2.style.order = temp;
+      }
+
+      function checkGuess(index) {
+        if (movingInterval) clearInterval(movingInterval);
+
+        const cups = document.querySelectorAll(".cup");
+        cups[ballPosition]
+          .querySelector(".ball")
+          .classList.remove("hidden-ball");
+
+        if (index === ballPosition) {
+          message.textContent = "تبریک! درست حدس زدی! 🎉";
+          message.style.color = "#388e3c";
+        } else {
+          message.textContent = "اشتباه کردی! 😞 گل اینجا بود.";
+          message.style.color = "#d32f2f";
+        }
+
+        restartButton.style.display = "block";
+      }
+
+      function restartGame() {
+        startGame();
+      }
+
+      // شروع بازی
+      startGame();
+    </script>
+  </body>
+</html>
